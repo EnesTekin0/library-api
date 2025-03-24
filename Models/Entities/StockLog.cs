@@ -4,7 +4,7 @@ namespace LibraryApi.Models.Entities
     {
         public int Id { get; set; }
         public int StockId { get; set; }
-        public int PersonnelId { get; set; } // İşlemi yapan personelin ID'si
+        public int PersonnelId { get; set; } 
         public string Action { get; set; } 
         public int ChangeAmount { get; set; }
         public DateTime Date { get; set; }

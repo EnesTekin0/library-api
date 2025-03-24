@@ -9,6 +9,6 @@ namespace LibraryApi.Models.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-        public List<Book> Books { get; set; } 
+        public ICollection<Book> Books { get; set; } 
     }
 }

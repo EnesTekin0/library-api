@@ -10,6 +10,6 @@ namespace LibraryApi.Models.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-        public List<Loan> Loans { get; set; } 
+        public ICollection<Lend> Lends { get; set; } 
     }
 }

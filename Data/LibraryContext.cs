@@ -14,8 +14,8 @@ namespace LibraryApi.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Personnel> Personnel { get; set; }
-        public DbSet<Loan> Loans { get; set; }
-        public DbSet<LoanDetail> LoanDetails { get; set; }
+        public DbSet<Lend> Lends { get; set; }
+        public DbSet<LendDetail> LendDetails { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockLog> StockLogs { get; set; }
 
@@ -29,23 +29,17 @@ namespace LibraryApi.Data
                 .WithOne(b => b.Author)
                 .HasForeignKey(b => b.AuthorId);
 
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.SubCategories)
-                .WithOne(sc => sc.ParentCategory)
-                .HasForeignKey(sc => sc.ParentCategoryId)
-                .OnDelete(DeleteBehavior.Restrict); // Döngüsel ilişkiler için
-
             modelBuilder.Entity<Book>()
                 .HasOne(b => b.Category)
                 .WithMany(c => c.Books)
                 .HasForeignKey(b => b.CategoryId);
 
-            modelBuilder.Entity<Loan>()
+            modelBuilder.Entity<Lend>()
                 .HasOne(l => l.Personnel)
                 .WithMany()
                 .HasForeignKey(l => l.PersonnelId);
 
-            modelBuilder.Entity<LoanDetail>()
+            modelBuilder.Entity<LendDetail>()
                 .HasOne(ld => ld.Book)
                 .WithMany()
                 .HasForeignKey(ld => ld.BookId);
@@ -59,12 +53,6 @@ namespace LibraryApi.Data
                 .HasOne(sl => sl.Personnel)
                 .WithMany()
                 .HasForeignKey(sl => sl.PersonnelId);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.ReplaceService<IHistoryRepository, NoLockNpgsqlHistoryRepository>();
         }
     }
 }

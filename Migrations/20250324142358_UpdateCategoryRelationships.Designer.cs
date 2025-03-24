@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace library_api.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20250318154216_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250324142358_UpdateCategoryRelationships")]
+    partial class UpdateCategoryRelationships
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,15 +119,10 @@ namespace library_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ParentCategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -166,7 +161,7 @@ namespace library_api.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("LibraryApi.Models.Entities.Loan", b =>
+            modelBuilder.Entity("LibraryApi.Models.Entities.Lend", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,7 +181,7 @@ namespace library_api.Migrations
                     b.Property<bool>("IsReturned")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("LoanDate")
+                    b.Property<DateTime>("LendDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("PersonnelId")
@@ -201,10 +196,10 @@ namespace library_api.Migrations
 
                     b.HasIndex("PersonnelId");
 
-                    b.ToTable("Loans");
+                    b.ToTable("Lends");
                 });
 
-            modelBuilder.Entity("LibraryApi.Models.Entities.LoanDetail", b =>
+            modelBuilder.Entity("LibraryApi.Models.Entities.LendDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,7 +216,7 @@ namespace library_api.Migrations
                     b.Property<bool>("IsLost")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("LoanId")
+                    b.Property<int>("LendId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("ReturnDate")
@@ -231,9 +226,9 @@ namespace library_api.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("LoanId");
+                    b.HasIndex("LendId");
 
-                    b.ToTable("LoanDetails");
+                    b.ToTable("LendDetails");
                 });
 
             modelBuilder.Entity("LibraryApi.Models.Entities.Personnel", b =>
@@ -350,20 +345,10 @@ namespace library_api.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("LibraryApi.Models.Entities.Category", b =>
-                {
-                    b.HasOne("LibraryApi.Models.Entities.Category", "ParentCategory")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("ParentCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("LibraryApi.Models.Entities.Loan", b =>
+            modelBuilder.Entity("LibraryApi.Models.Entities.Lend", b =>
                 {
                     b.HasOne("LibraryApi.Models.Entities.Customer", "Customer")
-                        .WithMany("Loans")
+                        .WithMany("Lends")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -379,7 +364,7 @@ namespace library_api.Migrations
                     b.Navigation("Personnel");
                 });
 
-            modelBuilder.Entity("LibraryApi.Models.Entities.LoanDetail", b =>
+            modelBuilder.Entity("LibraryApi.Models.Entities.LendDetail", b =>
                 {
                     b.HasOne("LibraryApi.Models.Entities.Book", "Book")
                         .WithMany()
@@ -387,15 +372,15 @@ namespace library_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryApi.Models.Entities.Loan", "Loan")
-                        .WithMany("LoanDetails")
-                        .HasForeignKey("LoanId")
+                    b.HasOne("LibraryApi.Models.Entities.Lend", "Lend")
+                        .WithMany("LendDetails")
+                        .HasForeignKey("LendId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
 
-                    b.Navigation("Loan");
+                    b.Navigation("Lend");
                 });
 
             modelBuilder.Entity("LibraryApi.Models.Entities.Stock", b =>
@@ -436,18 +421,16 @@ namespace library_api.Migrations
             modelBuilder.Entity("LibraryApi.Models.Entities.Category", b =>
                 {
                     b.Navigation("Books");
-
-                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("LibraryApi.Models.Entities.Customer", b =>
                 {
-                    b.Navigation("Loans");
+                    b.Navigation("Lends");
                 });
 
-            modelBuilder.Entity("LibraryApi.Models.Entities.Loan", b =>
+            modelBuilder.Entity("LibraryApi.Models.Entities.Lend", b =>
                 {
-                    b.Navigation("LoanDetails");
+                    b.Navigation("LendDetails");
                 });
 #pragma warning restore 612, 618
         }
