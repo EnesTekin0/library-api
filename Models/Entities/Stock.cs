@@ -6,7 +6,7 @@ namespace LibraryApi.Models.Entities
         public int BookId { get; set; }
         public int Quantity { get; set; } // kitap miktarı
         public DateTime LastUpdated { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public Book Book { get; set; } 
     }
